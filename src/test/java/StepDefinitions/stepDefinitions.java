@@ -466,8 +466,9 @@ public class stepDefinitions extends BaseClass  {
     }
 
     @Then("Select allowable action {string}")
-    public void selectAllowableAction(String arg0) {
-        driver.findElement(By.xpath("//td[span='"+arg0+"']/following-sibling::td/span[2]/p-checkbox/div/div[2]")).click();
+    public void selectAllowableAction(String arg0) throws InterruptedException {
+        Thread.sleep(500);
+        wait(20).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//td[span='"+arg0+"']/following-sibling::td/span[2]/p-checkbox/div/div[2]"))).click();
     }
 
     @Then("Navigate to My clients")
@@ -587,6 +588,28 @@ public class stepDefinitions extends BaseClass  {
     @Then("Submit engagement changes")
     public void submitEngagementChanges() {
         driver.findElement(By.xpath("//button[text()='Submit']")).click();
+    }
+
+    @Then("Navigate to My Tax > My agent")
+    public void navigateToMyTaxMyAgent() {
+        WebElement myTax = wait(40).until(ExpectedConditions.elementToBeClickable(By.id("id_btnMyTax")));
+        jse.executeScript("arguments[0].click()", myTax);
+        WebElement engagementNotifications =wait(40).until(ExpectedConditions.elementToBeClickable(By.id("id_btnMyAgents")));
+        jse.executeScript("arguments[0].click()", engagementNotifications);
+    }
+
+    @Then("Select agent from dropdown")
+    public void selectAgentFromDropdown() throws InterruptedException {
+        jse.executeScript("arguments[0].click()", wait(30).until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id=\"id_TaxpayerEngmntMgmtForm\"]/div[1]/tb-dropdown/div/div[2]/p-dropdown/div/div[3]"))));
+        Thread.sleep(1000);
+        actions.sendKeys(Keys.ARROW_DOWN).sendKeys(Keys.ENTER).perform();
+    }
+
+    @Then("Select engagement details taxtype")
+    public void selectEngagementDetailsTaxtype() throws InterruptedException {
+        jse.executeScript("arguments[0].click()", wait(30).until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id=\"id_TaxpayerEngmntMgmtForm\"]/div[4]/div/div/tb-dropdown/div/div[2]/p-dropdown/div/div[3]"))));
+        Thread.sleep(1000);
+        actions.sendKeys(Keys.ARROW_DOWN).sendKeys(Keys.ENTER).perform();
     }
 }
 
